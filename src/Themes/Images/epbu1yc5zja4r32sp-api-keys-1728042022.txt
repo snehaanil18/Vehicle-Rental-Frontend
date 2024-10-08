@@ -1,0 +1,10 @@
+=== Typesense Cloud: epbu1yc5zja4r32sp ===
+
+Admin API Key:
+PisDKPMkF4lmmRYhmmJ5kYFZooCSSfw2
+
+Search Only API Key:
+f6LKTmnGwxA9TyX7zjhrBC00FXv5FEoL
+
+Nodes:
+epbu1yc5zja4r32sp-1.a1.typesense.net [https:443]

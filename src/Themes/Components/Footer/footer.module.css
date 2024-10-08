@@ -1,0 +1,55 @@
+@font-face {
+    font-family: 'Bangers'; 
+    src: url('../../Fonts/Bangers/Bangers-Regular.ttf') format('truetype');
+    font-weight: 500; 
+    font-style: normal;
+}
+
+.footerContainer{
+    background-color: rgba(0, 0, 0, 0.856);
+    color: white;
+    padding: 20px 40px;
+}
+
+.about a{
+    font-family: "Bangers";
+    font-size: 40px;
+    color: rgb(252, 156, 48);
+    display: flex;
+    text-decoration: none;
+}
+
+.information{
+    display: flex;
+    gap: 100px;
+    padding: 20px 10px;
+}
+
+.information h3{
+    margin-bottom: 10px;
+}
+
+.aboutUs{
+    width: 450px;
+}
+
+.tabs{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.tabs a{
+    color: white;
+    text-decoration: none;
+}
+
+.links{
+    display: flex;
+    gap: 10px;
+}
+
+.copyright{
+    text-align: center;
+    margin-top: 10px;
+}

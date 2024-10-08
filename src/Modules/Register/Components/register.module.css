@@ -1,0 +1,42 @@
+
+
+.register{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin: 40px 0;
+   
+}
+
+.container{
+    width: 700px;
+    background-color: rgba(143, 143, 143, 0.103);
+    padding: 40px;
+    margin: 40px auto;
+}
+
+.container form{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.error{
+    color: red;
+    font-size: medium;
+}
+
+.login a{
+    color:rgb(252, 156, 48);
+    text-decoration: none;
+    margin-left: 5px;
+}
+
+.button{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 15px;
+}

@@ -1,0 +1,65 @@
+/* styles/WorkProcess.module.css */
+
+.workProcess {
+    background-color: #0b0b0d;
+    color: #fff;
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.title {
+    color: #ffa500;
+    font-size: 18px;
+    letter-spacing: 2px;
+}
+
+.subtitle {
+    font-size: 32px;
+    font-weight: 700;
+    margin: 10px 0;
+}
+
+.companyInfo {
+    margin-bottom: 40px;
+    font-size: 16px;
+    color: #dcdcdc;
+}
+
+.steps {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.step {
+    flex: 1;
+    max-width: 220px;
+    text-align: center;
+}
+
+.icons {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto 20px;
+    border-radius: 50%;
+    border: 2px solid #ffa500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icons:hover{
+    background-color: #ffa500;
+}
+
+.step h4 {
+    color: #ffa500;
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.step p {
+    font-size: 14px;
+    color: #dcdcdc;
+}

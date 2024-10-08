@@ -1,0 +1,27 @@
+.main{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+}
+
+.container{
+    display: flex;
+    padding: 20px 40px;
+    text-align: center;
+
+  
+}
+
+.details{
+    width: 300px;
+}
+
+.details h3{
+    color: rgb(252, 156, 48);
+}
+
+.details p{
+    margin-top: 20px;
+}

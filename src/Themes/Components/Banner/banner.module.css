@@ -1,0 +1,60 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f8f9fa;
+}
+
+.hero {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 80%;
+    max-width: 1200px; 
+}
+
+.content {
+    flex: 1;
+    margin-right: 32px; 
+}
+
+.title {
+    font-size: 48px;
+    font-weight: 700;
+    color: #333;
+}
+
+.subtitle {
+    font-size: 19.2px;
+    color: #666;
+    margin: 16px 0;
+}
+
+.exploreButton {
+    padding: 12.8px 24px; 
+    font-size: 16px; 
+    font-weight: 600;
+    color: white;
+    background-color: #ff8c00;
+    border: none;
+    border-radius: 5px; 
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.exploreButton.hovered {
+    background-color: #e67300;
+}
+
+.imageContainer {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.carImage {
+    width: 100%;
+    max-width: 500px;
+    height: auto;
+    object-fit: contain;
+}

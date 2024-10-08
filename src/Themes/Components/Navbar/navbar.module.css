@@ -1,0 +1,33 @@
+.navbarContainer{
+    padding: 20px 80px;
+    display: flex;
+    justify-content: space-between;
+    box-sizing: border-box;
+    box-shadow:  0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.logo a{
+    font-family: "Bangers";
+    font-size: 40px;
+    color: rgb(252, 156, 48);
+    display: flex;
+    text-decoration: none;
+}
+
+.elements{
+    display: flex;
+    box-sizing: border-box;
+    justify-content: center;
+    align-items: center;
+}
+
+.elements ul{
+    display: flex;
+    gap: 50px;
+    list-style: none;
+}
+
+.elements ul a{
+    text-decoration: none;
+    color: black;
+}
