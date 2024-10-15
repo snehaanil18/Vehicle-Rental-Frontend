@@ -1,3 +1,14 @@
+.back{
+    background:transparent;
+    border-radius: 24px;
+    padding: 0;
+    margin: 10px;
+}
+
+.back:hover{
+    background-color: #ffaf4e;
+}
+
 .container {
   display: flex;
   flex-direction: column;

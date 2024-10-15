@@ -1,33 +1,97 @@
-.navbarContainer{
+
+
+
+.navbarContainer {
     padding: 20px 80px;
     display: flex;
     justify-content: space-between;
+    align-items: center;
     box-sizing: border-box;
-    box-shadow:  0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    background-color: #fff;
+    position: relative;
 }
 
-.logo a{
-    font-family: "Bangers";
+.logo a {
+    font-family: "Bangers", sans-serif;
     font-size: 40px;
     color: rgb(252, 156, 48);
-    display: flex;
     text-decoration: none;
+    white-space: nowrap;
 }
 
-.elements{
+.menuIcon {
+    display: none;
+    font-size: 28px;
+    cursor: pointer;
+    color: #333;
+}
+
+.elements {
     display: flex;
-    box-sizing: border-box;
-    justify-content: center;
     align-items: center;
 }
 
-.elements ul{
+.elements ul {
     display: flex;
     gap: 50px;
     list-style: none;
+    margin: 0;
+    padding: 0;
 }
 
-.elements ul a{
+.elements ul a {
     text-decoration: none;
     color: black;
+    font-size: 16px;
+    transition: color 0.3s ease;
+}
+
+.elements ul a:hover {
+    color: rgb(252, 156, 48);
+}
+
+/* Responsive Design: 300px to 900px */
+@media (min-width: 300px) and (max-width: 900px) {
+    .navbarContainer {
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 10px 20px;
+    }
+
+    .logo a {
+        font-size: 32px;
+    }
+
+    .elements {
+        display: none; /* Initially hide the nav elements */
+        flex-direction: column;
+        position: absolute;
+        top: 60px;
+        right: 20px;
+        background-color: white;
+        border: 1px solid #ccc;
+        padding: 10px;
+        gap: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+    }
+
+    .elements.active {
+        display: flex; /* Show menu when active */
+    }
+
+    .menuIcon {
+        display: block; /* Show the menu icon */
+    }
+
+    .elements ul {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .elements ul a {
+        font-size: 16px;
+        color: black;
+    }
 }

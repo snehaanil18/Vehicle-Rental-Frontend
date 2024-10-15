@@ -10,6 +10,7 @@ export interface Vehicle {
     quantity: number;
     transmission: string;
     fueltype: string;
+    vehicletype:string;
 }
 
 export interface VehicleDetailsProps {

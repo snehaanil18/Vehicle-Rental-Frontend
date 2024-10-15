@@ -4,7 +4,6 @@
     align-items: center;
     gap: 40px;
     margin-top: 30px;
-    border: 1px solid black;
     padding: 30px;
 }
 
@@ -38,3 +37,13 @@
 .container button:hover {
     background-color: #e67300;
 }
+
+.error{
+    color: red;
+    font-weight: 600;
+}
+
+.disabled {
+    background-color: grey; /* Change to grey when disabled */
+    cursor: not-allowed;
+  }

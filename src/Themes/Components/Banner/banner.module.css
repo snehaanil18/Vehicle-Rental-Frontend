@@ -9,8 +9,10 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 80%;
-    max-width: 1200px; 
+    width: 100%; 
+    max-width: 1100px;
+    flex-wrap: wrap;
+
 }
 
 .content {
@@ -57,4 +59,34 @@
     max-width: 500px;
     height: auto;
     object-fit: contain;
+}
+
+@media (min-width: 300px) and (max-width: 900px) {
+    .hero {
+        justify-content: center;
+        flex-direction: column; /* Stack content and image */
+    }
+
+    .content {
+        margin-right: 0;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .title {
+        font-size: 24px; 
+    }
+
+    .subtitle {
+        font-size: 14px;
+    }
+
+    .exploreButton {
+        font-size: 12px;
+        padding: 8px 16px;
+    }
+
+    .carImage {
+        max-width: 350px;
+    }
 }

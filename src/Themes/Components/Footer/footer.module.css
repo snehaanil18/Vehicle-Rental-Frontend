@@ -9,6 +9,7 @@
     background-color: rgba(0, 0, 0, 0.856);
     color: white;
     padding: 20px 40px;
+    width: 100%;
 }
 
 .about a{
@@ -52,4 +53,38 @@
 .copyright{
     text-align: center;
     margin-top: 10px;
+}
+
+@media (min-width: 300px) and (max-width: 900px) {
+    .footerContainer {
+        padding: 20px;
+        text-align: center;
+    }
+
+    .information {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .about a {
+        font-size: 32px;
+    }
+
+    .aboutUs {
+        width: 100%;
+    }
+
+    .tabs {
+        align-items: center;
+    }
+
+    .links {
+        justify-content: center;
+    }
+
+    .copyright {
+        font-size: 12px;
+        margin-top: 15px;
+    }
 }

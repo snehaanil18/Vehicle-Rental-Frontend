@@ -65,7 +65,7 @@ function AllCars() {
                 />
             </div>
 
-            {/* Tabs for switching vehicle types */}
+           
             {!searchTerm && (
                 <div className={styles.tabs}>
                     {vehicleTypes.map(type => (
@@ -81,13 +81,13 @@ function AllCars() {
             )}
 
 
-            {/* Vehicle Cards - Render only if filteredVehicles exists */}
+            
             {filteredVehicles && (
                 <div className={styles.container}>
                     <div className={styles.cardContainer}>
                         {filteredVehicles.map((vehicle: Vehicle) => (
                             <div key={vehicle.id} className={styles.card}>
-                                <Image src={vehicle.primaryimage} alt={vehicle.name} height={200} width={350} />
+                                <Image src={vehicle.primaryimage} alt={vehicle.name} height={200} width={300}  />
 
                                 <h3 className={styles.cardTitle}>{vehicle.name}</h3>
 

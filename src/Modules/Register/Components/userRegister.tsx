@@ -5,7 +5,7 @@ import { useMutation } from '@apollo/client';
 import InputField from '@/Utils/Components/InputField/InputField';
 import styles from './register.module.css';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Swal from 'sweetalert2'
 
 type UserDetails = {
@@ -33,6 +33,8 @@ function Register() {
         country: '',
         pincode: '',
     });
+    const searchParams = useSearchParams();
+    const redirect = searchParams.get('redirect');
 
     const [errors, setErrors] = useState<Partial<Record<keyof UserDetails, string>>>({});
     const [addUser, { loading, error }] = useMutation(ADD_USER, {
@@ -47,7 +49,11 @@ function Register() {
             })
 
             // Redirect to login page
-            router.push('/login');
+            if (redirect) {
+                router.push(redirect);
+            } else {
+                router.push('/login'); 
+            }
             setUserDetails({
                 name: '',
                 email: '',

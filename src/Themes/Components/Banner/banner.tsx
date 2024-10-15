@@ -1,34 +1,3 @@
-// import Link from 'next/link'
-// import styles from './banner.module.css'
-// import Button from '@/Utils/Components/Button/Button'
-
-// import Image from 'next/image'
-
-
-// export default function Banner() {
-//     return (
-//         <div className={styles.main}>
-//             <div className={styles.banner}>
-//                 <div className={styles.container}>
-//                     <h1>Self Drive Car Rental</h1>
-//                     <div>Choose Your Favourate Car & Enjoy Your Ride</div>
-//                     <Link href={'/cars'}>
-//                         <Button label='Explore' />
-//                     </Link>
-//                 </div>
-//                 <div className="bannerImg">
-//                     <Image src={banner} alt='car-banner' height={400} width={480}/>
-//                 </div>
-//                 {/* <div className="bannerImg">
-//                 <Image src={banner} alt='car-banner' height={280} width={400}/>
-//             </div> */}
-//             </div>
-//         </div>
-
-//     )
-// }
-
-// src/app/page.tsx
 "use client";
 import Image from 'next/image';
 import { useState } from 'react';
