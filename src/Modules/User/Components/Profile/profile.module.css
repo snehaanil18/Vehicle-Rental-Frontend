@@ -1,0 +1,139 @@
+.profileContainer {
+    width: 80%;
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.profileContent {
+    display: flex;
+    flex-direction:row;
+    justify-content: space-between;
+    gap: 100px;
+}
+
+.profileImage {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.profileImage #profile{
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.profileDetails {
+    width: 100%;
+    text-align: left;
+    font-size: 16px;
+}
+
+.profileDetails p {
+    margin: 10px 0;
+}
+
+.profileDetails strong {
+    color: #333;
+}
+
+.profileEdit button{
+    background: transparent;
+}
+
+.actions {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.updateBtn{
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color:rgb(252, 156, 48);
+    color: #fff;
+}
+
+.changeImageBtn{
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
+}
+
+.updateBtn:hover,
+.changeImageBtn:hover {
+    opacity: 0.9;
+}
+
+.bookingsSection{
+    width: 80%;
+    max-width: 900px;
+    margin: 20px auto;
+}
+
+.bookingsSection table {
+   
+    border-collapse: collapse;
+    margin: 20px auto;
+    font-size: 1rem;
+    font-family: 'Arial', sans-serif;
+}
+
+.bookingsSection table thead th {
+    background-color: #f2f2f2;
+    color: #333;
+    padding: 10px;
+    text-align: left;
+    border-bottom: 2px solid #ddd;
+}
+
+.bookingsSection table tbody td {
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+.bookingsSection table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.bookingsSection table tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+.bookingsSection table th, .bookingsSection table td {
+    text-align: left;
+}
+
+.modalClose{
+    display: flex;
+    justify-content: flex-end;
+}
+
+.modalContent{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.modalActions{
+    display: flex;
+    margin: 20px 0;
+    gap: 20px;
+    justify-content: center;
+}

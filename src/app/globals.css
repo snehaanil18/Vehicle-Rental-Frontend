@@ -17,4 +17,10 @@ button{
   padding: 10px;
   border: none;
   outline: none;
+  cursor: pointer;
+  color: white;
+}
+
+a{
+  cursor: pointer;
 }

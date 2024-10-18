@@ -31,7 +31,8 @@ function UserLogin() {
 
             if (response.data) {
                 const details = response.data.loginUser
-
+                console.log(details,'detasil');
+                
                 // Show success alert
                 Swal.fire({
                     title: 'Success!',
@@ -40,7 +41,7 @@ function UserLogin() {
                     confirmButtonText: 'OK'
                 })
                 // Store or use the user details as needed
-                dispatch(setUser({ id: details.id, name: details.name, email: details.email }));
+                dispatch(setUser({ id: details.id, name: details.name, email: details.email, phone: details.phone, city: details.city,state: details.state,country: details.country,pincode: details.pincode, profileimage: details.profileimage || null }));
                 if (redirect) {
                     router.push(redirect);
                 } else {
@@ -112,7 +113,7 @@ function UserLogin() {
                     </button>
 
                     <div className={styles.register}>Don&apos;t have a Account?
-                            <Link  href={`/register?redirect=login?${encodeURIComponent(redirect || '/')}`}>Register Here</Link>
+                            <Link  href={`/register?redirect=login?${encodeURIComponent(redirect ?? '/')}`}>Register Here</Link>
                         </div>
                     </div>
     

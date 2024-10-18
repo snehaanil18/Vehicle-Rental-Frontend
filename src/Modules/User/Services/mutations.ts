@@ -68,16 +68,16 @@ export const VERIFY_PAYMENT = gql`
 
 export const CREATE_PAYMENT = gql`
   mutation CreatePayment(
-    $bookingId: String!,
-    $amountPaid: Float!,
+    $bookingid: String!,
+    $amountpaid: Float!,
     $status: String!,
     $vehicleid: String!,
     $pickupdate: String!,
      $dropoffdate: String!
   ) {
-    createPayment(bookingId: $bookingId, amountPaid: $amountPaid, status: $status,vehicleid: $vehicleid,pickupdate: $pickupdate, dropoffdate: $dropoffdate ) {
-      bookingId
-      amountPaid
+    createPayment(bookingid: $bookingid, amountpaid: $amountpaid, status: $status,vehicleid: $vehicleid,pickupdate: $pickupdate, dropoffdate: $dropoffdate ) {
+      bookingid
+      amountpaid
       status
     }
   }
@@ -90,4 +90,53 @@ export const CHECK_AVAILABILITY_QUERY = gql`
       message
     }
   }
+`;
+
+export const UPDATE_PROFILE_IMAGE = gql`
+  mutation updateProfileImage($id: ID!, $file: Upload!) {
+    updateProfileImage(id: $id, file: $file) {
+      id
+      name
+      email
+      profileimage
+    }
+  }
+`;
+
+export const GET_USER_BOOKINGS = gql`
+  query GetUserBookings($userid: ID!) {
+    getBookingsByUser(userid: $userid) {
+      id
+      vehiclename
+      pickupdate
+      pickuplocation
+      dropoffdate
+      dropofflocation
+    }
+  }
+`;
+
+export const UPDATE_USER = gql`
+mutation UpdateUser($id: ID!, $name: String, $email: String, $phone: String, $city: String, $state: String, $country: String, $pincode: String) {
+  updateUser(
+    id: $id,
+    name: $name,
+    email: $email,
+    phone: $phone,
+    city: $city,
+    state: $state,
+    country: $country,
+    pincode: $pincode
+  ) {
+    id
+    name
+    email
+    phone
+    city
+    state
+    country
+    pincode
+    profileimage
+  }
+}
 `;

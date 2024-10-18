@@ -11,6 +11,7 @@ mutation LoginUser($email: String!, $password: String!) {
     state
     country
     pincode
+    profileimage
   }
 }
 `;

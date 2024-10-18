@@ -12,7 +12,7 @@ export interface RazorpayOptions {
       email: string;
     };
     notes: {
-      bookingId: string;
+      bookingid: string;
     };
     theme: {
       color: string;

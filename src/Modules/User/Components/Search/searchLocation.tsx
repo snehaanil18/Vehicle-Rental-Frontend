@@ -9,7 +9,8 @@ import { useRouter } from 'next/navigation';
 import { useMutation, useLazyQuery } from '@apollo/client';
 import { CREATE_BOOKING_MUTATION, CREATE_PAYMENT_ORDER, VERIFY_PAYMENT, CREATE_PAYMENT, CHECK_AVAILABILITY_QUERY } from '../../Services/mutations';
 import { RazorpayOptions, RazorpayResponse } from '@/Utils/Models/razorpay'
-import { CreatePaymentOrderResult, CreateBookingResult } from '@/Utils/Models/booking'
+import { CreatePaymentOrderResult, CreateBookingResponse } from '@/Utils/Models/booking'
+import Swal from 'sweetalert2'
 
 interface SearchProps {
   vehicle: Vehicle;
@@ -20,23 +21,7 @@ interface data {
   message: string
 }
 
-interface Details {
-  success: boolean;
-  message: string;
-  booking: {
-    id: string;
-    vehicleid: string;
-    vehiclename: string;
-    pickupdate: string;
-    pickuplocation: string;
-    dropoffdate: string;
-    dropofflocation: string;
-    totalamount: number;
-    username: string;
-    userid: string;
-    paymentstatus: string;
-  };
-}
+
 
 
 const Search: React.FC<SearchProps> = ({ vehicle }) => {
@@ -53,7 +38,7 @@ const Search: React.FC<SearchProps> = ({ vehicle }) => {
   });
 
   const [verifyPayment] = useMutation(VERIFY_PAYMENT);
-  const [createBooking] = useMutation<CreateBookingResult>(CREATE_BOOKING_MUTATION);
+  const [createBooking] = useMutation<CreateBookingResponse>(CREATE_BOOKING_MUTATION);
   const [createPaymentOrder] = useMutation<CreatePaymentOrderResult>(CREATE_PAYMENT_ORDER);
   const [createPayment] = useMutation(CREATE_PAYMENT);
 
@@ -119,11 +104,6 @@ console.log('click');
       return;
     }
 
-    if (!pickupDateTime || !dropDateTime) {
-      setErrorMessage("Please select both pick-up and drop-off dates.");
-      return;
-    }
-
     const pickupDate = new Date(pickupDateTime);
     const dropDate = new Date(dropDateTime);
     const currentDate = new Date();
@@ -164,19 +144,6 @@ console.log('click');
     const timeDifference = dropDate.getTime() - pickupDate.getTime();
     const daysDifference = Math.ceil(timeDifference / (1000 * 3600 * 24));
 
-
-    if (availabilityLoading) {
-      setErrorMessage("Checking vehicle availability...");
-      return;
-    }
-
-    if (availabilityError || !availabilityData?.getVehicleAvailability.available) {
-      console.log('data', availabilityData);
-
-      setErrorMessage(availabilityError?.message || "Vehicle not available for the selected dates.");
-      return;
-    }
-
     const bookingDetails = {
       vehicleid: vehicle.id,
       vehiclename: vehicle.name,
@@ -193,6 +160,8 @@ console.log('click');
     
 
     const { data: bookingData } = await createBooking({ variables: bookingDetails });
+    console.log(bookingData);
+    
     const details = bookingData?.createBooking;
     const value = details?.booking;
 
@@ -236,8 +205,8 @@ console.log('click');
 
           if (resp.success == true) {
             const paymentDetails = {
-              bookingId: value.id,
-              amountPaid: value.totalamount,
+              bookingid: value?.id,
+              amountpaid: parseFloat(value.totalamount),
               status: "Completed",
               vehicleid: vehicle.id,
               pickupdate: pickupDateTime,
@@ -249,11 +218,21 @@ console.log('click');
   
 
             if (paymentData) {
-              alert("Payment successful!");
+              Swal.fire({
+                title: 'Success!',
+                text: 'Payment successful!',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            })
             }
 
           } else {
-            alert("Payment failed!");
+            Swal.fire({
+              title: 'Error!',
+              text: 'Payment failed!',
+              icon: 'error',
+              confirmButtonText: 'OK'
+          })
           }
         },
         prefill: {
@@ -261,7 +240,7 @@ console.log('click');
           email: user.email,
         },
         notes: {
-          bookingId: value.id,
+          bookingid: value.id,
         },
         theme: {
           color: "#F37254",
@@ -329,7 +308,7 @@ console.log('click');
         {errors.dropDateTime && <p className={styles.error}>{errors.dropDateTime}</p>}
       </div>
 
-
+          {errorMessage && <div>{errorMessage} </div>}
       <div>
         <button className={styles.rentButton}  onClick={handleClick}>
           Rent
