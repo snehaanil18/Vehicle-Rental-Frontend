@@ -21,9 +21,18 @@ mutation createUser(
     country: $country,
     pincode: $pincode
   ) {
-    id
-    name
-    email
+    userId
+    success
+    message
   }
 }
+`;
+
+export const VERIFY_OTP = gql`
+  mutation VerifyOTP($id: ID!,$phone: String!, $otp: String!) {
+    verifyOTP(id: $id,phone: $phone, otp: $otp) {
+      success
+      message
+    }
+  }
 `;

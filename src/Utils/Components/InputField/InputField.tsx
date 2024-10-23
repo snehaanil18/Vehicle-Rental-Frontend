@@ -4,8 +4,8 @@ import styles from './field.module.css';
 interface InputFieldProps {
   label?: string;
   type: string;
-  name: string;
-  value: string | number | File | null;
+  name?: string;
+  value?: string | number | File | null;
   placeholder?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;

@@ -9,8 +9,8 @@ export const CREATE_BOOKING_MUTATION = gql`
     $dropoffdate: String!,
     $dropofflocation: String!,
     $totalamount: Float!,
-    $username: String!,
-    $userid: String!,
+    $username: String,
+    $userid: String,
     $paymentstatus: PaymentStatus!
   ) {
     createBooking(
@@ -139,4 +139,31 @@ mutation UpdateUser($id: ID!, $name: String, $email: String, $phone: String, $ci
     profileimage
   }
 }
+`;
+
+export const GET_USER = gql`
+query GetUser {
+  user {
+      id
+      name
+      email
+      phone
+      city
+      state
+      country
+      pincode
+      profileimage
+      phoneverify
+  
+  }
+}
+`;
+
+export const CANCEL_BOOKING = gql`
+  mutation CancelBooking($bookingId: String!) {
+    cancelBooking(bookingId: $bookingId) {
+      success
+      message
+    }
+  }
 `;

@@ -43,6 +43,12 @@
     gap: 15px;
 }
 
+.modal{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
 
 @media (min-width: 300px) and (max-width: 900px) {
     .container {

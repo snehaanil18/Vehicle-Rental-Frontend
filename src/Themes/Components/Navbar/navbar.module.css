@@ -38,6 +38,7 @@
     list-style: none;
     margin: 0;
     padding: 0;
+    align-items: center;
 }
 
 .elements ul a {
@@ -45,10 +46,21 @@
     color: black;
     font-size: 16px;
     transition: color 0.3s ease;
+    
 }
 
 .elements ul a:hover {
     color: rgb(252, 156, 48);
+}
+
+.profile{
+    display: flex;
+    gap: 50px;
+    align-items: center;
+}
+
+.profile button{
+    margin-bottom: 10px;
 }
 
 /* Responsive Design: 300px to 900px */

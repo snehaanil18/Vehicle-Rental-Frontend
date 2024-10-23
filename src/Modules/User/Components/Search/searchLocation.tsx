@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from 'react';
 import { commonPlacesInKochi } from '@/Utils/Models/commonPlaces';
 import styles from './search.module.css';
-import { Vehicle } from '@/Utils/Models/Vehicle';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/Utils/Redux/store';
 import { useRouter } from 'next/navigation';
@@ -11,17 +10,7 @@ import { CREATE_BOOKING_MUTATION, CREATE_PAYMENT_ORDER, VERIFY_PAYMENT, CREATE_P
 import { RazorpayOptions, RazorpayResponse } from '@/Utils/Models/razorpay'
 import { CreatePaymentOrderResult, CreateBookingResponse } from '@/Utils/Models/booking'
 import Swal from 'sweetalert2'
-
-interface SearchProps {
-  vehicle: Vehicle;
-}
-
-interface data {
-  available: boolean
-  message: string
-}
-
-
+import { SearchProps, data } from '@/Utils/Models/search';
 
 
 const Search: React.FC<SearchProps> = ({ vehicle }) => {
@@ -95,11 +84,12 @@ const Search: React.FC<SearchProps> = ({ vehicle }) => {
 
 
   const handleClick = async () => {
-console.log('click');
+    console.log('click');
 
     if (!validateFields()) return;
+    const token = sessionStorage.getItem('token')
 
-    if (!user.id) {
+    if (!token) {
       router.push(`/login?redirect=/car/${vehicle.id}`);
       return;
     }
@@ -157,11 +147,11 @@ console.log('click');
       paymentstatus: "Pending",
     };
 
-    
+
 
     const { data: bookingData } = await createBooking({ variables: bookingDetails });
     console.log(bookingData);
-    
+
     const details = bookingData?.createBooking;
     const value = details?.booking;
 
@@ -212,10 +202,10 @@ console.log('click');
               pickupdate: pickupDateTime,
               dropoffdate: dropDateTime,
             };
-    
+
 
             const { data: paymentData } = await createPayment({ variables: paymentDetails });
-  
+
 
             if (paymentData) {
               Swal.fire({
@@ -223,7 +213,8 @@ console.log('click');
                 text: 'Payment successful!',
                 icon: 'success',
                 confirmButtonText: 'OK'
-            })
+              })
+              router.push('/')
             }
 
           } else {
@@ -232,7 +223,7 @@ console.log('click');
               text: 'Payment failed!',
               icon: 'error',
               confirmButtonText: 'OK'
-          })
+            })
           }
         },
         prefill: {
@@ -278,7 +269,7 @@ console.log('click');
           value={pickupDateTime}
           onChange={(e) => setPickupDateTime(e.target.value)}
         />
-         {errors.pickupDateTime && <p className={styles.error}>{errors.pickupDateTime}</p>}
+        {errors.pickupDateTime && <p className={styles.error}>{errors.pickupDateTime}</p>}
       </div>
 
       <div>
@@ -308,9 +299,9 @@ console.log('click');
         {errors.dropDateTime && <p className={styles.error}>{errors.dropDateTime}</p>}
       </div>
 
-          {errorMessage && <div>{errorMessage} </div>}
+      {errorMessage && <div>{errorMessage} </div>}
       <div>
-        <button className={styles.rentButton}  onClick={handleClick}>
+        <button className={styles.rentButton} onClick={handleClick}>
           Rent
         </button>
       </div>

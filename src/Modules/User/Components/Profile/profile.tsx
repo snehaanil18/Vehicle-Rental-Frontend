@@ -1,54 +1,105 @@
+
 "use client";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '@/Utils/Redux/store';
 import styles from './profile.module.css';
 import Image from 'next/image';
-import def from '@/Themes/Images/image-x-generic-symbolic-svgrepo-com.svg'
-import add from '@/Themes/Images/image-add-svgrepo-com.svg'
-import { UPDATE_PROFILE_IMAGE, GET_USER_BOOKINGS, UPDATE_USER } from '../../Services/mutations'
+import def from '@/Themes/Images/image-x-generic-symbolic-svgrepo-com.svg';
+import add from '@/Themes/Images/image-add-svgrepo-com.svg';
+import { UPDATE_PROFILE_IMAGE, GET_USER_BOOKINGS, UPDATE_USER, GET_USER, CANCEL_BOOKING } from '../../Services/mutations';
 import { useMutation, useQuery } from '@apollo/client';
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2';
 import { Booking } from '@/Utils/Models/booking';
-import edit from '@/Themes/Images/edit-2-svgrepo-com.svg'
-import Modal from '@/Utils/Components/Modal/modal'
+import edit from '@/Themes/Images/edit-2-svgrepo-com.svg';
+import Modal from '@/Utils/Components/Modal/modal';
 import InputField from '@/Utils/Components/InputField/InputField';
 import { setUser } from '@/Utils/Redux/Slices/userSlice';
+
 
 
 const Profile = () => {
     const dispatch = useDispatch();
     const user = useSelector((state: RootState) => state.user);
     const [selectedImage, setSelectedImage] = useState<File | null>(null);
-    const [show, setShow] = useState(false)
+    const [show, setShow] = useState(false);
     const [bookings, setBookings] = useState<Booking[]>([]);
     const [showModal, setShowModal] = useState(false);
+    
     const [editedProfile, setEditedProfile] = useState({
-        name: user.name,
-        email: user.email,
-        phone: user.phone,
-        city: user.city,
-        state: user.state,
-        country: user.country,
-        pincode: user.pincode,
+        name: '',
+        email: '',
+        phone: '',
+        city: '',
+        state: '',
+        country: '',
+        pincode: ''
     });
+    console.log('reux',user);
+    console.log('edited',editedProfile);
+    
+    
 
-
-    const {  loading: bookingsLoading, error: bookingsError } = useQuery<{ getBookingsByUser: Booking[] }>(GET_USER_BOOKINGS, {
+    // Always call useQuery and useMutation hooks
+    const { loading, error, data : userData} = useQuery(GET_USER);
+    const { loading: bookingsLoading, error: bookingsError, refetch } = useQuery<{ getBookingsByUser: Booking[] }>(GET_USER_BOOKINGS, {
         variables: { userid: user.id },
         onCompleted: (data) => {
             setBookings(data?.getBookingsByUser ?? []);
         },
     });
 
-    const formatDate = (timestamp: string) => {
-        const date = new Date(parseInt(timestamp));
-        return new Intl.DateTimeFormat('en-US', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-        }).format(date);
+        const [cancelBooking] = useMutation(CANCEL_BOOKING, {
+        onCompleted: (data) => {
+            refetch()
+            if (data.cancelBooking.success) {
+                Swal.fire('Cancelled!', data.cancelBooking.message, 'success');
+                
+            } else {
+                Swal.fire('Error!', data.cancelBooking.message, 'error');
+            }
+        },
+        onError: (error) => {
+            console.error('Error!', 'Failed to cancel booking', error);
+        }
+    });
+
+    // Handle booking cancellation on button click
+    const handleCancelBooking = (bookingId: string) => {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "Do you really want to cancel this booking?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, cancel it!',
+            cancelButtonText: 'No, keep it'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                cancelBooking({ variables: { bookingId } });
+            }
+        });
     };
+
+    useEffect(() => {
+        if (userData) {
+          const details = userData.user
+          dispatch(setUser({ id: details.id, name: details.name, email: details.email, phone: details.phone, city: details.city,state: details.state,country: details.country,pincode: details.pincode, profileimage: details.profileimage || null }));
+        }
+      }, [userData, dispatch]);
+
+      useEffect(() => {
+        
+        setEditedProfile({
+            name: user.name,
+            email: user.email,
+            phone: user.phone || '',
+            city: user.city || '',
+            state: user.state || '',
+            country: user.country || '',
+            pincode: user.pincode || ''
+        });
+    }, [user]);
+    
 
     const [updateProfileImage] = useMutation(UPDATE_PROFILE_IMAGE, {
         onCompleted: (data) => {
@@ -58,8 +109,7 @@ const Profile = () => {
                 text: 'Profile Image Updated',
                 icon: 'success',
                 confirmButtonText: 'OK'
-            })
-
+            });
         },
         onError: (error) => {
             console.error("Error updating profile image:", error);
@@ -86,7 +136,6 @@ const Profile = () => {
                 icon: 'success',
                 confirmButtonText: 'OK',
             });
-            
         },
         onError: (error) => {
             console.error("Error updating user:", error);
@@ -101,7 +150,7 @@ const Profile = () => {
 
     // Handle image selection
     const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const file = event.target?.files?.[0]; // Use optional chaining
+        const file = event.target?.files?.[0];
         if (file) {
             setSelectedImage(file);
             uploadImage(file);
@@ -109,12 +158,14 @@ const Profile = () => {
     };
 
     const showOption = () => {
-        setShow(!show)
-    }
+        setShow(!show);
+    };
 
     // Handle image upload
     const uploadImage = (file: File) => {
-        updateProfileImage({ variables: { id: user.id, file } });  // Assuming 'id' is part of user state
+        console.log('upload image');
+        
+        updateProfileImage({ variables: { id: user.id, file } });
     };
 
     const closeModal = () => {
@@ -135,6 +186,18 @@ const Profile = () => {
         }
     };
 
+    // Early return for loading and error handling
+    if (loading || bookingsLoading) return <p>Loading...</p>;
+    if (error || bookingsError) return <p>Error: {error?.message || bookingsError?.message}</p>;
+
+    const formatDate = (timestamp: string) => {
+        const date = new Date(parseInt(timestamp));
+        return new Intl.DateTimeFormat('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+        }).format(date);
+    };
     return (
         <div>
 
@@ -212,7 +275,7 @@ const Profile = () => {
             <div className={styles.bookingsSection}>
                     <h3>Booking History</h3>
                     {bookingsLoading && <p>Loading bookings...</p>}
-                    {bookingsError && <p>Error loading bookings: {bookingsError.message}</p>}
+                    {bookingsError && <p>Error loading bookings: {bookingsError}</p>}
                     {bookings.length === 0 && !bookingsLoading && <p>No bookings found.</p>}
                     <table>
                         <thead>
@@ -222,6 +285,7 @@ const Profile = () => {
                                 <th>Pickup Date</th>
                                 <th>Dropoff Location</th>
                                 <th>Dropoff Date</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
 
@@ -234,6 +298,9 @@ const Profile = () => {
                                         <td>{formatDate(booking.pickupdate)}</td>
                                         <td>{booking.dropofflocation}</td>
                                         <td>{formatDate(booking.dropoffdate)}</td>
+                                        <td className={styles.cancel}>
+                                            <button onClick={() => handleCancelBooking(booking.id)}>Cancel</button>
+                                        </td>
                                     </tr>
                                 ))}
                             </tbody>

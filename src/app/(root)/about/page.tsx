@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from 'react';
-import { gql, useMutation } from '@apollo/client';
+import { gql, useMutation, useQuery  } from '@apollo/client';
+import { GET_USER } from '@/Modules/User/Services/mutations';
 
 const UPLOAD_FILE = gql`
   mutation UploadFile($file: Upload!) {
@@ -14,7 +15,9 @@ const UPLOAD_FILE = gql`
 const UploadFile = () => {
     const [file, setFile] = useState<File | null>(null);
   const [uploadFile, { data, loading, error }] = useMutation(UPLOAD_FILE);
-
+  const {  data : userData} = useQuery(GET_USER);
+  
+  console.log('userDt',userData);
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files ? e.target.files[0] : null;
     setFile(file);

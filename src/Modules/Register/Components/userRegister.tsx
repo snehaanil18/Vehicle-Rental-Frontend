@@ -1,12 +1,14 @@
 "use client";
 import React, { useState } from 'react';
-import { ADD_USER } from '../Services/mutations';
+import { ADD_USER, VERIFY_OTP } from '../Services/mutations';
 import { useMutation } from '@apollo/client';
 import InputField from '@/Utils/Components/InputField/InputField';
 import styles from './register.module.css';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Swal from 'sweetalert2'
+import Modal from '@/Utils/Components/Modal/modal';
+
 
 type UserDetails = {
     name: string;
@@ -33,41 +35,77 @@ function Register() {
         country: '',
         pincode: '',
     });
+
+    const [otpModalOpen, setOtpModalOpen] = useState(false);
+    const [otp, setOtp] = useState('');
+    const [userId, setUserId] = useState('')
+
     const searchParams = useSearchParams();
     const redirect = searchParams.get('redirect');
 
     const [errors, setErrors] = useState<Partial<Record<keyof UserDetails, string>>>({});
     const [addUser, { loading, error }] = useMutation(ADD_USER, {
-        onCompleted: () => {
-
-            // Show success alert
-            Swal.fire({
-                title: 'Success!',
-                text: 'Registration successful! Please log in',
-                icon: 'success',
-                confirmButtonText: 'OK'
-            })
-
-            // Redirect to login page
-            if (redirect) {
-                router.push(redirect);
-            } else {
-                router.push('/login'); 
+        onCompleted: (data) => {
+            if (data.createUser) {
+                setUserId(data.createUser.userId);
             }
-            setUserDetails({
-                name: '',
-                email: '',
-                password: '',
-                confirmPassword: '',
-                phone: '',
-                city: '',
-                state: '',
-                country: '',
-                pincode: '',
-            });
+            // Show success alert
+            // Swal.fire({
+            //     title: 'Success!',
+            //     text: 'Registration successful! Please log in',
+            //     icon: 'success',
+            //     confirmButtonText: 'OK'
+            // })
+
+            // // Redirect to login page
+            // if (redirect) {
+            //     router.push(redirect);
+            // } else {
+            //     router.push('/login');
+            // }
+            // setUserDetails({
+            //     name: '',
+            //     email: '',
+            //     password: '',
+            //     confirmPassword: '',
+            //     phone: '',
+            //     city: '',
+            //     state: '',
+            //     country: '',
+            //     pincode: '',
+            // });
             setErrors({}); // Clear errors on successful submission
         },
+
     });
+
+    const [verifyOtp, { loading: otpLoading,  }] = useMutation(VERIFY_OTP, {
+        onCompleted: (data) => {
+            if (data.verifyOTP.success) {
+                Swal.fire({
+                    title: 'Success!',
+                    text: 'OTP verified successfully.',
+                    icon: 'success',
+                    confirmButtonText: 'OK',
+                });
+                setOtpModalOpen(false); // Close the OTP modal
+                // Redirect to login page
+                if (redirect) {
+                    router.push(redirect);
+                } else {
+                    router.push('/login');
+                }
+            } else {
+                Swal.fire({
+                    title: 'Error!',
+                    text: data.verifyOTP.message,
+                    icon: 'error',
+                    confirmButtonText: 'OK',
+                });
+            }
+        },
+    });
+
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -183,10 +221,27 @@ function Register() {
 
         try {
             await addUser({ variables: userDetails });
+            setOtpModalOpen(true);
         } catch (err) {
             console.error('Error adding user:', err);
         }
     };
+
+    const handleVerifyOtp = async () => {
+        try {
+             await verifyOtp({
+                variables: {
+                    id: userId,
+                    phone: userDetails.phone, 
+                    otp,
+                },
+            });
+
+        } catch (err) {
+            console.error('Error verifying OTP:', err);
+        }
+    };
+
 
     return (
         <div className={styles.register}>
@@ -246,7 +301,7 @@ function Register() {
                         onBlur={handleBlur}
                         placeholder="Confirm your password"
                     />
-                    {errors.confirmPassword && <p className={styles.error}>{errors.confirmPassword}</p>} 
+                    {errors.confirmPassword && <p className={styles.error}>{errors.confirmPassword}</p>}
 
 
                     <InputField
@@ -306,11 +361,25 @@ function Register() {
                     </div>
 
 
-                    {error && <p className={styles.error}>Error: {error.message}</p>}
+                    {error && <p className={styles.error}>Error: {error.message} </p>}
                 </form>
 
             </div>
 
+            {otpModalOpen && (
+                <Modal onClose={() => setOtpModalOpen(false)} >
+                    <div className={styles.modal}>
+                        <label htmlFor="phone">Phone Number : {userDetails.phone}</label>
+                        <InputField type='text' onChange={(e) => setOtp(e.target.value)} placeholder="Enter OTP" />
+
+                        <div className={styles.button}>
+                            <button onClick={handleVerifyOtp} disabled={otpLoading}>
+                                {otpLoading ? 'Verifying OTP...' : 'Verify OTP'}
+                            </button>
+                        </div>
+                    </div>
+                </Modal>
+            )}
 
         </div>
     );

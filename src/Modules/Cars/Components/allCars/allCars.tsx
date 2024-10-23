@@ -10,8 +10,7 @@ import icon from '@/Themes/Images/snow-alt-svgrepo-com (1).svg'
 import seat from '@/Themes/Images/seat-svgrepo-com.svg'
 import Button from '@/Utils/Components/Button/Button';
 import InputField from '@/Utils/Components/InputField/InputField';
-import { useRouter } from 'next/navigation'; 
-
+import { useRouter } from 'next/navigation';
 
 function AllCars() {
     const router = useRouter();
@@ -20,6 +19,7 @@ function AllCars() {
     const [selectedType, setSelectedType] = useState('All');
     const [searchTerm, setSearchTerm] = useState('');
     const [searchResults, setSearchResults] = useState<Vehicle[]>([]);
+    const [isSortedByPrice, setIsSortedByPrice] = useState(false);
 
     const [searchVehicles, { loading: searchLoading, error: searchError }] = useLazyQuery(SEARCH_VEHICLES, {
         onCompleted: (data) => {
@@ -38,6 +38,9 @@ function AllCars() {
         }
     };
 
+    const handleSortByPrice = () => {
+        setIsSortedByPrice(true);
+    };
 
     let filteredVehicles: Vehicle[] | undefined;
 
@@ -47,6 +50,9 @@ function AllCars() {
         filteredVehicles = data?.getAllVehicles;
     } else {
         filteredVehicles = data?.getAllVehicles?.filter(vehicle => vehicle.vehicletype.toLowerCase() === selectedType.toLowerCase());
+    }
+    if (isSortedByPrice && filteredVehicles) {
+        filteredVehicles = [...filteredVehicles].sort((a, b) => a.price - b.price);
     }
 
     if (loading || searchLoading) return <p>Loading...</p>;
@@ -63,9 +69,12 @@ function AllCars() {
                     value={searchTerm}
                     onChange={handleSearchChange}
                 />
+                <button onClick={handleSortByPrice}>Sort by Price</button>
             </div>
 
-           
+            
+
+
             {!searchTerm && (
                 <div className={styles.tabs}>
                     {vehicleTypes.map(type => (
@@ -81,13 +90,13 @@ function AllCars() {
             )}
 
 
-            
+
             {filteredVehicles && (
                 <div className={styles.container}>
                     <div className={styles.cardContainer}>
                         {filteredVehicles.map((vehicle: Vehicle) => (
                             <div key={vehicle.id} className={styles.card}>
-                                <Image src={vehicle.primaryimage} alt={vehicle.name} height={200} width={300}  />
+                                <Image src={vehicle.primaryimage} alt={vehicle.name} height={200} width={300} />
 
                                 <h3 className={styles.cardTitle}>{vehicle.name}</h3>
 

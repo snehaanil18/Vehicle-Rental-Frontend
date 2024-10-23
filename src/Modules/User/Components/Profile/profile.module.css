@@ -82,13 +82,12 @@
 }
 
 .bookingsSection{
-    width: 80%;
+    width: 90%;
     max-width: 900px;
     margin: 20px auto;
 }
 
 .bookingsSection table {
-   
     border-collapse: collapse;
     margin: 20px auto;
     font-size: 1rem;
@@ -100,12 +99,12 @@
     color: #333;
     padding: 10px;
     text-align: left;
-    border-bottom: 2px solid #ddd;
+    border-bottom: 2px solid #ddd; 
 }
 
 .bookingsSection table tbody td {
     padding: 10px;
-    border: 1px solid #ddd;
+    border: none; 
 }
 
 .bookingsSection table tbody tr:nth-child(even) {
@@ -118,6 +117,15 @@
 
 .bookingsSection table th, .bookingsSection table td {
     text-align: left;
+}
+
+.cancel button{
+    background: transparent;
+    color: rgb(110, 152, 190);
+}
+
+.cancel button:hover{
+    text-decoration: underline;
 }
 
 .modalClose{
@@ -137,3 +145,27 @@
     gap: 20px;
     justify-content: center;
 }
+
+@media (min-width: 300px) and (max-width: 900px)  {
+    .profileContent {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .bookingsSection table {
+        width: 100%;
+        margin: 0;
+    }
+
+    .bookingsSection table th, 
+    .bookingsSection table td {
+        font-size: 14px;
+    }
+
+    .updateBtn {
+        width: 100%;
+        margin-top: 10px;
+    }
+}
+

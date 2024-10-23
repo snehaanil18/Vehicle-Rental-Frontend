@@ -11,7 +11,6 @@ import styles from './login.module.css'
 import InputField from '@/Utils/Components/InputField/InputField';
 import Link from 'next/link';
 
-
 function UserLogin() {
     const dispatch = useDispatch();
     const user = useSelector((state: RootState) => state.user);
@@ -28,11 +27,11 @@ function UserLogin() {
             const response = await loginUser({
                 variables: userDetail,
             });
-
-            if (response.data) {
-                const details = response.data.loginUser
-                console.log(details,'detasil');
-                
+            
+            if (response.data.loginUser.success) {
+                const details = response.data.loginUser.user
+                const token = response.data.loginUser.token
+                sessionStorage.setItem('token',token)
                 // Show success alert
                 Swal.fire({
                     title: 'Success!',
@@ -50,14 +49,14 @@ function UserLogin() {
 
             }
             else {
-                if (error) {
+                
                     Swal.fire({
                         title: 'Error!',
-                        text: 'Login Failed!',
+                        text: response.data?.loginUser.message || 'Login Failed!',
                         icon: 'error',
                         confirmButtonText: 'OK'
                     })
-                }
+                
             }
 
         } catch (err) {
