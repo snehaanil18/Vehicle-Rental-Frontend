@@ -150,7 +150,7 @@ const Search: React.FC<SearchProps> = ({ vehicle }) => {
 
 
     const { data: bookingData } = await createBooking({ variables: bookingDetails });
-    console.log(bookingData);
+  
 
     const details = bookingData?.createBooking;
     const value = details?.booking;

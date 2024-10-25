@@ -4,18 +4,18 @@ import { createUploadLink } from 'apollo-upload-client';
 import { setContext } from '@apollo/client/link/context';
 
 const uploadLink = createUploadLink({
-  uri: 'http://localhost:4000/graphql',
+  uri: process.env.NEXT_PUBLIC_BACKEND,
 });
 
-// Set up authentication link to include JWT token in headers
+
 const authLink = setContext((_, { headers }) => {
-  // Get the token from localStorage (or sessionStorage)
+
   const token = sessionStorage.getItem('token');
 
   return {
     headers: {
       ...headers,
-      authorization: token ? `Bearer ${token}` : "",  // Add token to the Authorization header
+      authorization: token ? `Bearer ${token}` : "",  
     }
   };
 });

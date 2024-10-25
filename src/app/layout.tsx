@@ -1,4 +1,3 @@
-
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
@@ -6,7 +5,7 @@ import ClientProvider from "@/Utils/clientProvider/clientProvider";
 import Navbar from "@/Themes/Components/Navbar/Navbar";
 import Footer from "@/Themes/Components/Footer/Footer";
 import ReduxProvider from "@/Utils/Redux/reduxProvider";
-
+import { SocketProvider } from '@/Utils/Context/webSocketContext';
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -31,19 +30,17 @@ export default function RootLayout({
 }>) {
   return (
     <ReduxProvider>
-      
-
-        <html lang="en">
-          <body className={`${geistSans.variable} ${geistMono.variable}`}>
-          <ClientProvider>
+      <html lang="en">
+        <body className={`${geistSans.variable} ${geistMono.variable}`}>
+          <SocketProvider>
+            <ClientProvider>
               <Navbar />
               {children}
               <Footer />
-              </ClientProvider>
-          </body>
-        </html>
-
-      
+            </ClientProvider>
+          </SocketProvider>
+        </body>
+      </html>
     </ReduxProvider>
   );
 }

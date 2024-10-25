@@ -10,7 +10,7 @@ interface InputFieldProps {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
   className?: string;
-  readOnly?: boolean;
+  
 }
 
 const InputField: React.FC<InputFieldProps> = ({

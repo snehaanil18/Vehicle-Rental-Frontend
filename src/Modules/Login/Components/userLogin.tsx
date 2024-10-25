@@ -10,6 +10,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import styles from './login.module.css'
 import InputField from '@/Utils/Components/InputField/InputField';
 import Link from 'next/link';
+import { setNotifications } from '@/Utils/Redux/Slices/notificationSlice';
 
 function UserLogin() {
     const dispatch = useDispatch();
@@ -19,6 +20,8 @@ function UserLogin() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const redirect = searchParams.get('redirect');
+    console.log('login', user);
+
 
     const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -27,11 +30,12 @@ function UserLogin() {
             const response = await loginUser({
                 variables: userDetail,
             });
-            
+
             if (response.data.loginUser.success) {
                 const details = response.data.loginUser.user
                 const token = response.data.loginUser.token
-                sessionStorage.setItem('token',token)
+                sessionStorage.setItem('token', token)
+                
                 // Show success alert
                 Swal.fire({
                     title: 'Success!',
@@ -40,7 +44,9 @@ function UserLogin() {
                     confirmButtonText: 'OK'
                 })
                 // Store or use the user details as needed
-                dispatch(setUser({ id: details.id, name: details.name, email: details.email, phone: details.phone, city: details.city,state: details.state,country: details.country,pincode: details.pincode, profileimage: details.profileimage || null }));
+                const notifications = response.data.loginUser.notifications;
+                dispatch(setNotifications(notifications));
+                dispatch(setUser({ id: details.id, name: details.name, email: details.email, phone: details.phone, city: details.city, state: details.state, country: details.country, pincode: details.pincode, profileimage: details.profileimage || null }));
                 if (redirect) {
                     router.push(redirect);
                 } else {
@@ -49,14 +55,14 @@ function UserLogin() {
 
             }
             else {
-                
-                    Swal.fire({
-                        title: 'Error!',
-                        text: response.data?.loginUser.message || 'Login Failed!',
-                        icon: 'error',
-                        confirmButtonText: 'OK'
-                    })
-                
+
+                Swal.fire({
+                    title: 'Error!',
+                    text: response.data?.loginUser.message || 'Login Failed!',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                })
+
             }
 
         } catch (err) {
@@ -75,7 +81,7 @@ function UserLogin() {
         // Update userDetail state based on input name
         setUserDetail({
             ...userDetail,
-            [name]: value, 
+            [name]: value,
         });
 
     };
@@ -84,7 +90,7 @@ function UserLogin() {
         <div className={styles.login}>
             <h1>LOGIN HERE</h1>
             <div className={styles.container}>
-                
+
                 <form onSubmit={handleLogin}>
                     <div>
                         <InputField
@@ -107,19 +113,19 @@ function UserLogin() {
                         />
                     </div>
                     <div className={styles.button}>
-                    <button type="submit" disabled={loading}>
-                        {loading ? 'Logging in...' : 'Login'}
-                    </button>
+                        <button type="submit" disabled={loading}>
+                            {loading ? 'Logging in...' : 'Login'}
+                        </button>
 
-                    <div className={styles.register}>Don&apos;t have a Account?
-                            <Link  href={`/register?redirect=login?${encodeURIComponent(redirect ?? '/')}`}>Register Here</Link>
+                        <div className={styles.register}>Don&apos;t have a Account?
+                            <Link href={`/register?redirect=login?${encodeURIComponent(redirect ?? '/')}`}>Register Here</Link>
                         </div>
                     </div>
-    
+
                     {error && <p>Error: {error.message}</p>}
                 </form>
                 {user && (
-                    <p style={{display:'none'}}>
+                    <p style={{ display: 'none' }}>
                         status : {user.isLoggedIn}
                     </p>
                 )}

@@ -4,6 +4,8 @@ import WorkProcess from "@/Themes/Components/Works/Works";
 
 
 export default function HomeView(){
+
+    
     return(
         <div>
             <Banner/>

@@ -13,6 +13,7 @@ import InputField from '@/Utils/Components/InputField/InputField';
 import { useRouter } from 'next/navigation';
 
 function AllCars() {
+
     const router = useRouter();
     const vehicleTypes = ['All', 'SUV', 'Sedan', 'Truck', 'Coupe', 'Hatchback', 'Convertible', 'Wagon'];
     const { loading, error, data } = useQuery<{ getAllVehicles: Vehicle[] }>(GET_ALL_VEHICLES);
@@ -56,7 +57,7 @@ function AllCars() {
     }
 
     if (loading || searchLoading) return <p>Loading...</p>;
-    if (error || searchError) return <p>Error: {error?.message || searchError?.message}</p>;
+    if (error || searchError) return <p>Error: {error?.message ?? searchError?.message}</p>;
 
     return (
         <div>

@@ -40,6 +40,7 @@ export const CREATE_BOOKING_MUTATION = gql`
       userid
       paymentstatus
     }
+  
   }
   }
 `;
@@ -112,6 +113,7 @@ export const GET_USER_BOOKINGS = gql`
       pickuplocation
       dropoffdate
       dropofflocation
+      paymentstatus
     }
   }
 `;
@@ -159,6 +161,15 @@ query GetUser {
 }
 `;
 
+export const GET_USER_NOTIFICATIONS = gql`
+query GetUserNotifications($userid: String!) {
+  getUserNotifications(userid: $userid) {
+    id
+    message
+
+  }
+}
+`;
 export const CANCEL_BOOKING = gql`
   mutation CancelBooking($bookingId: String!) {
     cancelBooking(bookingId: $bookingId) {

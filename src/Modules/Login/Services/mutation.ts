@@ -18,6 +18,9 @@ mutation LoginUser($email: String!, $password: String!) {
       profileimage
       phoneverify
     }
+    notifications{
+      message
+    }
   }
    
 }
