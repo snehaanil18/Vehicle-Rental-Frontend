@@ -38,6 +38,9 @@ const Search: React.FC<SearchProps> = ({ vehicle }) => {
   const [checkAvailability, { data: availabilityData, loading: availabilityLoading, error: availabilityError }] =
     useLazyQuery<{ getVehicleAvailability: data }>(CHECK_AVAILABILITY_QUERY);
 
+    console.log('2',availabilityData);
+    
+
   useEffect(() => {
     if (pickupDateTime && dropDateTime) {
       const formattedPickupDateTime = pickupDateTime ? new Date(pickupDateTime).toISOString() : '';
@@ -150,7 +153,7 @@ const Search: React.FC<SearchProps> = ({ vehicle }) => {
 
 
     const { data: bookingData } = await createBooking({ variables: bookingDetails });
-  
+
 
     const details = bookingData?.createBooking;
     const value = details?.booking;
@@ -301,10 +304,17 @@ const Search: React.FC<SearchProps> = ({ vehicle }) => {
 
       {errorMessage && <div>{errorMessage} </div>}
       <div>
-        <button className={styles.rentButton} onClick={handleClick}>
-          Rent
-        </button>
+        {availabilityData?.getVehicleAvailability.available && 
+          <button className={styles.rentButton} onClick={handleClick}>
+            Rent
+          </button>
+        }
+
       </div>
+
+      {availabilityData?.getVehicleAvailability.available == false && (
+         <div className={styles.error}>Vehicle not available for selected dates</div>
+      )}
 
     </div>
   );
