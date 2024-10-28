@@ -2,7 +2,7 @@
 import React, { useState } from 'react'
 import { Vehicle } from '@/Utils/Models/Vehicle';
 import { useQuery, useLazyQuery } from '@apollo/client';
-import { GET_ALL_VEHICLES, SEARCH_VEHICLES } from '../../Services/mutation'
+import { GET_ALL_VEHICLES, SEARCH_VEHICLES, SEARCH_VEHICLES_BY_PRICE_RANGE } from '../../Services/mutation'
 import styles from './allCars.module.css'
 import Image from 'next/image';
 import car from '@/Themes/Images/car-svgrepo-com (1).svg'
@@ -12,6 +12,12 @@ import Button from '@/Utils/Components/Button/Button';
 import InputField from '@/Utils/Components/InputField/InputField';
 import { useRouter } from 'next/navigation';
 
+interface range {
+    label:string,
+    min: string
+    max: string
+}
+
 function AllCars() {
 
     const router = useRouter();
@@ -20,7 +26,18 @@ function AllCars() {
     const [selectedType, setSelectedType] = useState('All');
     const [searchTerm, setSearchTerm] = useState('');
     const [searchResults, setSearchResults] = useState<Vehicle[]>([]);
-    const [isSortedByPrice, setIsSortedByPrice] = useState(false);
+    // const [isSortedByPrice, setIsSortedByPrice] = useState(false);
+
+    const priceRanges: range[]  = [
+        { label: 'All', min: '0.0', max: 'Infinity' },
+        { label: '0-1000', min: '0.0', max: '1000.0' },
+        { label: '1000-2000', min: '1000', max: '2000' },
+        { label: '2000-3000', min: '2000', max: '3000'},
+        { label: '3000-4000', min: '3000', max: '4000'},
+        { label: '4000-5000', min: '4000', max: '5000' },
+        { label: '5000-6000', min: '5000', max: '6000' },
+        { label: '5000-6000', min: '6000', max: '7000' },
+    ];
 
     const [searchVehicles, { loading: searchLoading, error: searchError }] = useLazyQuery(SEARCH_VEHICLES, {
         onCompleted: (data) => {
@@ -28,6 +45,25 @@ function AllCars() {
         },
     });
 
+    const [searchVehiclesByPriceRange] = useLazyQuery(SEARCH_VEHICLES_BY_PRICE_RANGE, {
+        onCompleted: (data) => {
+            setSearchResults(data.searchVehiclesByPriceRange);
+        },
+    });
+
+    const [selectedRange, setSelectedRange] = useState(priceRanges[0]);
+
+    const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        const selectedIndex = Number(event.target.value);
+        const range = priceRanges[selectedIndex];
+
+        setSelectedRange(range);
+        console.log(range.min,range.max);
+        
+ 
+        // Call the new lazy query with the selected price range
+        searchVehiclesByPriceRange({ variables: { minPrice:  range.min , maxPrice: range.max } });
+    };
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         setSearchTerm(value);
@@ -39,9 +75,7 @@ function AllCars() {
         }
     };
 
-    const handleSortByPrice = () => {
-        setIsSortedByPrice(true);
-    };
+
 
     let filteredVehicles: Vehicle[] | undefined;
 
@@ -52,9 +86,7 @@ function AllCars() {
     } else {
         filteredVehicles = data?.getAllVehicles?.filter(vehicle => vehicle.vehicletype.toLowerCase() === selectedType.toLowerCase());
     }
-    if (isSortedByPrice && filteredVehicles) {
-        filteredVehicles = [...filteredVehicles].sort((a, b) => a.price - b.price);
-    }
+
 
     if (loading || searchLoading) return <p>Loading...</p>;
     if (error || searchError) return <p>Error: {error?.message ?? searchError?.message}</p>;
@@ -70,10 +102,17 @@ function AllCars() {
                     value={searchTerm}
                     onChange={handleSearchChange}
                 />
-                <button onClick={handleSortByPrice}>Sort by Price</button>
+
+                <select value={priceRanges.indexOf(selectedRange)} onChange={handleChange}>
+                    {priceRanges.map((range, index) => (
+                        <option key={index} value={index}>
+                            {range.label}
+                        </option>
+                    ))}
+                </select>
             </div>
 
-            
+
 
 
             {!searchTerm && (

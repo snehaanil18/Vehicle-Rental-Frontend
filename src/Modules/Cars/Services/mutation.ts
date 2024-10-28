@@ -37,6 +37,24 @@ query SearchVehicles($query: String!) {
 }
 `;
 
+export const SEARCH_VEHICLES_BY_PRICE_RANGE = gql`
+  query SearchVehiclesByPriceRange($minPrice: String!, $maxPrice: String!) {
+    searchVehiclesByPriceRange(minPrice: $minPrice, maxPrice: $maxPrice) {
+      id
+    name
+    description
+    price
+    model
+    manufacturer
+    primaryimage
+    vehicletype
+    quantity
+    transmission
+    fueltype
+    }
+  }
+`;
+
 export const GET_VEHICLE = gql`
   query GetVehicle($id: ID!) {
     getVehicle(id: $id) {
